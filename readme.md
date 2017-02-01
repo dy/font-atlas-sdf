@@ -7,7 +7,7 @@ generate SDF (Signed Distance Field) fonts. SDF is the most efficient way to dra
 
 [![NPM](https://nodei.co/npm/font-atlas-sdf.png)](https://nodei.co/npm/font-atlas-sdf/)
 
-### canvas = fontAtlas([options])
+### canvas = fontAtlas(options?)
 
 Populates and returns a `<canvas>` element with a font texture atlas. Takes
 the following options:
@@ -26,9 +26,10 @@ the following options:
   * an array specifying the `[start, end]` character codes to use. By default,
     this is `[32, 126]`.
 
+<img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
+
 ## Related
 
 * [font-atlas](https://github.com/hughsk/font-atlas) — bitmap font atlas.
 * [tiny-sdf](https://github.com/mapbox/tiny-sdf) — fast glyph signed distance field generation.
 
-<img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture" width="280"/>
