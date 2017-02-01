@@ -60,6 +60,5 @@ function atlas(options) {
 		if ((x += step[0]) > shape[0] - step[0]/2) (x = step[0]/2), (y += step[1])
 	}
 
-
 	return canvas
 }
