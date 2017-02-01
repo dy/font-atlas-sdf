@@ -16,13 +16,14 @@ function update (o) {
 	assign(opts, o)
 
 	let w = [Math.min(400, opts.size*16)]
+	let size = opts.size
 
 	atlasSDF({
 		canvas: c1,
 	  family: opts.family
 	  , size: opts.size
 	  , shape: [w,w]
-	  , step: [opts.size*2, opts.size*2]
+	  , step: [size*2, size*2]
 	})
 	console.timeEnd('sdf')
 
@@ -33,7 +34,7 @@ function update (o) {
 	  family: opts.family
 	  , size: opts.size
 	  , shape: [w,w]
-	  , step: [opts.size*2, opts.size*2]
+	  , step: [size*2, size*2]
 	})
 	console.timeEnd('bm')
 }

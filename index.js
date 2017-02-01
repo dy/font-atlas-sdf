@@ -11,7 +11,7 @@ function atlas(options) {
 	let step = options.step || [32, 32]
 	let size = options.size || 16
 	let chars = options.chars || [32, 126]
-	let bufferSize = Math.floor(size/1.6)
+	let bufferSize = Math.floor(size/1.5)
 	let sdf = new SDF(size, bufferSize, bufferSize, 0, family)
 
 	if (typeof size === 'number') {
@@ -47,7 +47,6 @@ function atlas(options) {
 	ctx.textBaseline = 'middle'
 	ctx.textAlign = 'center'
 
-
 	let x = step[0] / 2
 	let y = step[1] / 2
 	let len = Math.min(chars.length, Math.floor(shape[0]/step[0]) * Math.floor(shape[1]/step[1]))
@@ -55,7 +54,8 @@ function atlas(options) {
 	for (let i = 0; i < len; i++) {
 		let metric = ctx.measureText(chars[i])
 		let data = sdf.draw(chars[i])
-		ctx.putImageData(data, Math.max(x - data.width/4 - metric.width/2, 0), Math.max(y - data.height/2, 0))
+
+		ctx.putImageData(data, x - data.width/4 - metric.width/2, y - data.height/2)
 
 		if ((x += step[0]) > shape[0] - step[0]/2) (x = step[0]/2), (y += step[1])
 	}
