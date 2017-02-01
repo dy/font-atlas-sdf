@@ -5,7 +5,7 @@ generate SDF (Signed Distance Field) fonts. SDF is the most efficient way to dra
 
 ## Usage
 
-[![NPM](https://nodei.co/npm/font-atlas-sdf.png)](https://nodei.co/npm/font-atlas-sdf/)
+[![npm install font-atlas-sdf](https://nodei.co/npm/font-atlas-sdf.png?mini=true)](https://npmjs.org/package/font-atlas-sdf/)
 
 ### canvas = fontAtlas(options?)
 
