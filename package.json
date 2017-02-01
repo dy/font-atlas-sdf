@@ -1,0 +1,43 @@
+{
+  "name": "font-atlas-sdf",
+  "version": "1.0.0",
+  "description": "Populate a <canvas> with SDF font texture atlas",
+  "main": "index.js",
+  "scripts": {
+    "test": "budo test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfcreative/font-atlas-sdf.git"
+  },
+  "keywords": [
+    "font",
+    "type",
+    "typography",
+    "gamedev",
+    "canvas",
+    "browser",
+    "browserify",
+    "element",
+    "atlas",
+    "text",
+    "sdf",
+    "webgl",
+    "stackgl",
+    "gl"
+  ],
+  "author": "Dima Yv <dfcreative@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dfcreative/font-atlas-sdf/issues"
+  },
+  "homepage": "https://github.com/dfcreative/font-atlas-sdf#readme",
+  "dependencies": {
+    "settings-panel": "^1.8.17",
+    "tiny-sdf": "^1.0.2"
+  },
+  "devDependencies": {
+    "font-atlas": "^1.0.0",
+    "object-assign": "^4.1.1"
+  }
+}
