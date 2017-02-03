@@ -25,6 +25,7 @@ the following options:
   * an array of all the characters to use.
   * an array specifying the `[start, end]` character codes to use. By default,
     this is `[32, 126]`.
+* `radius`: affects the "slope" of distance-transform, defaults to _size × 1.5_.
 
 <img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
 

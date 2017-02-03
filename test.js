@@ -7,24 +7,26 @@ let c1 = document.body.appendChild(document.createElement('canvas'))
 let c2 = document.body.appendChild(document.createElement('canvas'))
 
 let opts = {
-	family: 'Helvetica',
-	size: 21,
-	chars: 'xyz'
+	family: 'sans-serif',
+	size: 64,
+	// chars: [100, 120]
+	chars: ['●','#','✝','+', 'xyz']
 }
 
 function update (o) {
 	console.time('sdf')
 	assign(opts, o)
 
-	let w = [Math.min(400, opts.size*16)]
+	let w = [Math.min(512, opts.size*16)]
 	let size = opts.size
+	let step = size*2.2
 
 	atlasSDF({
 		canvas: c1,
 	  family: opts.family
 	  , size: opts.size
 	  , shape: [w,w]
-	  , step: [size*2, size*2],
+	  , step: [step, step],
 	  chars: opts.chars
 	})
 	console.timeEnd('sdf')
@@ -36,10 +38,29 @@ function update (o) {
 	  family: opts.family
 	  , size: opts.size
 	  , shape: [w,w]
-	  , step: [size*2, size*2],
+	  , step: [step, step],
 	  chars: opts.chars
 	})
 	console.timeEnd('bm')
+
+	//render lines
+	let ctx1 = c1.getContext('2d')
+	let ctx2 = c2.getContext('2d')
+	for (let i = 0; i <= w/step; i++) {
+		ctx1.fillStyle = 'rgba(255,200,200,.5)'
+		ctx2.fillStyle = 'rgba(255,200,200,.5)'
+		ctx1.fillRect(i*step - step/2 - .5,0,1,w)
+		ctx2.fillRect(i*step - step/2 - .5,0,1,w)
+		ctx1.fillRect(0, i*step - step/2 - .5,w,1)
+		ctx2.fillRect(0, i*step - step/2 - .5,w,1)
+
+		ctx1.fillStyle = 'rgba(200,200,255,.5)'
+		ctx2.fillStyle = 'rgba(200,200,255,.5)'
+		ctx1.fillRect(i*step - .5,0,1,w)
+		ctx2.fillRect(i*step - .5,0,1,w)
+		ctx1.fillRect(0, i*step - .5,w,1)
+		ctx2.fillRect(0, i*step - .5,w,1)
+	}
 }
 
 createPanel([
@@ -49,9 +70,9 @@ createPanel([
 {id: 'family', type: 'text', value: opts.family, change: v => {
 	update({family: v})
 }},
-{id: 'chars', type: 'text', value: opts.chars, change: v => {
-	update({chars: v})
-}}
+// {id: 'chars', type: 'text', value: opts.chars, change: v => {
+// 	update({chars: v})
+// }}
 // {id: 'step', type: 'range', min: 1, max: 128, value: 21, step: 1, change: v => {
 // 	update({size: v})
 // }}

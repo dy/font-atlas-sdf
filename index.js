@@ -1,3 +1,5 @@
+'use strict'
+
 const SDF = require('tiny-sdf')
 
 module.exports = atlas
@@ -11,8 +13,9 @@ function atlas(options) {
 	let step = options.step || [32, 32]
 	let size = options.size || 16
 	let chars = options.chars || [32, 126]
-	let bufferSize = Math.floor(size/1.5)
-	let sdf = new SDF(size, bufferSize, bufferSize, 0, family)
+	let bufferSize = Math.floor((step[0] - size)/2)
+	let radius = options.radius || bufferSize*1.5
+	let sdf = new SDF(size, bufferSize, radius, 0, family)
 
 	if (typeof size === 'number') {
 		size = size + 'px'
@@ -45,20 +48,34 @@ function atlas(options) {
 	ctx.fillRect(0, 0, canvas.width, canvas.height)
 	ctx.font = size + ' ' + family
 	ctx.textBaseline = 'middle'
-	ctx.textAlign = 'center'
 
-	let x = step[0] / 2
-	let y = step[1] / 2
-	let len = Math.min(chars.length, Math.floor(shape[0]/step[0]) * Math.floor(shape[1]/step[1]))
+	let x = 0
+	let y = 0
+	let len = Math.min(chars.length, Math.floor(shape[0]/step[0]) * Math.ceil(shape[1]/step[1]))
+
+	// hack tiny-sdf to render centered
+	//FIXME: get rif of it by [possibly] PR to tiny-sdf
+	let align = sdf.ctx.textAlign
+	let buffer = sdf.buffer
+
+	sdf.ctx.textAlign = 'center'
+	sdf.buffer = sdf.size/2
 
 	for (let i = 0; i < len; i++) {
-		let metric = ctx.measureText(chars[i])
 		let data = sdf.draw(chars[i])
 
-		ctx.putImageData(data, x - data.width/4 - metric.width/2, y - data.height/2)
+		ctx.putImageData(data, x, y)
 
-		if ((x += step[0]) > shape[0] - step[0]/2) (x = step[0]/2), (y += step[1])
+		x += step[0]
+		if (x >= shape[0] - step[0]) {
+			x = 0
+			y += step[1]
+		}
 	}
+
+	// unhack tiny-sdf
+	sdf.ctx.textAlign = align
+	sdf.buffer = buffer
 
 	return canvas
 }
