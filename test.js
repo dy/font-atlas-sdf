@@ -10,7 +10,7 @@ let opts = {
 	family: 'sans-serif',
 	size: 64,
 	// chars: [100, 120]
-	chars: ['●','#','✝','+', 'xyz']
+	// chars: ['●','#','✝','+', 'xyz']
 }
 
 function update (o) {

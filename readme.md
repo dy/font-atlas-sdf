@@ -3,6 +3,8 @@
 Populate a `<canvas>` element with a font texture atlas – can be used to quickly
 generate SDF (Signed Distance Field) fonts. SDF is the most efficient way to draw text in WebGL, see [article](https://www.mapbox.com/blog/text-signed-distance-fields/). For bitmap fonts see [font-atlas](https://github.com/hughsk/font-atlas).
 
+[Demo](https://dfcreative.github.io/font-atlas-sdf)
+
 ## Usage
 
 [![npm install font-atlas-sdf](https://nodei.co/npm/font-atlas-sdf.png?mini=true)](https://npmjs.org/package/font-atlas-sdf/)
