@@ -67,7 +67,7 @@ function atlas(options) {
 		ctx.putImageData(data, x, y)
 
 		x += step[0]
-		if (x >= shape[0] - step[0]) {
+		if (x > shape[0] - step[0]) {
 			x = 0
 			y += step[1]
 		}
