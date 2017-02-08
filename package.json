@@ -34,10 +34,10 @@
   },
   "homepage": "https://github.com/dfcreative/font-atlas-sdf#readme",
   "dependencies": {
-    "settings-panel": "^1.8.17",
     "tiny-sdf": "^1.0.2"
   },
   "devDependencies": {
+    "settings-panel": "^1.8.17",
     "bubleify": "^0.7.0",
     "font-atlas": "^1.0.0",
     "object-assign": "^4.1.1"
