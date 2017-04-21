@@ -16,6 +16,7 @@ function atlas(options) {
 	var bufferSize = Math.floor((step[0] - size)/2)
 	var radius = options.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
+	var align = options.align || true
 	var i, j
 
 	if (typeof size === 'number') {
@@ -65,7 +66,10 @@ function atlas(options) {
 	for (i = 0; i < len; i++) {
 		var data = sdf.draw(chars[i])
 
-		ctx.putImageData(data, x, y)
+		var offY = 0
+		if (align) offY = getAlignOffset(data)
+
+		ctx.putImageData(data, x, y - offY)
 
 		x += step[0]
 		if (x > shape[0] - step[0]) {
@@ -79,4 +83,42 @@ function atlas(options) {
 	sdf.buffer = buffer
 
 	return canvas
+
+
+	function getAlignOffset (data) {
+		var buf = data.data, w = data.width, h = data.height
+
+		var top = 0, bottom = 0
+
+		//find top boundary
+		for (var y = 0; y < h; y++) {
+			var line = y * w * 4
+			for (var x = 0; x < w; x++) {
+				var r = buf[line + x * 4]
+
+				if (r > 0) {
+					top = y
+					break
+				}
+			}
+			if (top) break
+		}
+
+		//find bottom boundary
+		for (var y = h; y--;) {
+			var line = y * w * 4
+			for (var x = 0; x < w; x++) {
+				var r = buf[line + x * 4]
+
+				if (r > 0) {
+					bottom = y
+					break
+				}
+			}
+			if (bottom) break
+		}
+
+		return top - .5 * (top + (h - bottom))
+	}
 }
+
