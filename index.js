@@ -16,7 +16,7 @@ function atlas(options) {
 	var bufferSize = Math.floor((step[0] - size)/2)
 	var radius = options.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
-	var align = options.align || true
+	var vAlign = options.align || true
 	var i, j
 
 	if (typeof size === 'number') {
@@ -67,7 +67,7 @@ function atlas(options) {
 		var data = sdf.draw(chars[i])
 
 		var offY = 0
-		if (align) offY = getAlignOffset(data)
+		if (vAlign) offY = getAlignOffset(data)
 
 		ctx.putImageData(data, x, y - offY)
 
@@ -88,13 +88,13 @@ function atlas(options) {
 	function getAlignOffset (data) {
 		var buf = data.data, w = data.width, h = data.height
 
-		var top = 0, bottom = 0
+		var top = 0, bottom = 0, x, y, r, line
 
 		//find top boundary
-		for (var y = 0; y < h; y++) {
-			var line = y * w * 4
-			for (var x = 0; x < w; x++) {
-				var r = buf[line + x * 4]
+		for (y = 0; y < h; y++) {
+			line = y * w * 4
+			for (x = 0; x < w; x++) {
+				r = buf[line + x * 4]
 
 				if (r > 0) {
 					top = y
@@ -105,10 +105,10 @@ function atlas(options) {
 		}
 
 		//find bottom boundary
-		for (var y = h; y--;) {
-			var line = y * w * 4
-			for (var x = 0; x < w; x++) {
-				var r = buf[line + x * 4]
+		for (y = h; y--;) {
+			line = y * w * 4
+			for (x = 0; x < w; x++) {
+				r = buf[line + x * 4]
 
 				if (r > 0) {
 					bottom = y
