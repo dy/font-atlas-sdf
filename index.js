@@ -20,7 +20,7 @@ function atlas(options) {
 	var bufferSize = Math.floor((step[0] - size)/2)
 	var radius = options.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
-	var vAlign = options.align || true
+	var vAlign = options.align || 'optical'
 	var i, j
 
 	if (typeof size === 'number') {
@@ -72,12 +72,16 @@ function atlas(options) {
 
 		var offY = 0
 		if (vAlign) {
-			// offY = getAlignOffset(data)
-			var center = getOpticalCenter(data)
-			offY = -data.height/2 + center[1]
+			if (vAlign === 'optical') {
+				var center = getOpticalCenter(data)
+				offY = -data.height/2 + center[1]
+			}
+			else {
+				offY = getAlignOffset(data)
+			}
 		}
 
-		ctx.putImageData(data, x, y - offY)
+		ctx.putImageData(data, x, y - offY, 0, offY, data.width, data.height - offY)
 
 		x += step[0]
 		if (x > shape[0] - step[0]) {
@@ -94,7 +98,6 @@ function atlas(options) {
 
 
 	function getAlignOffset (data) {
-		console.time(1)
 		var buf = data.data, w = data.width, h = data.height
 
 		var top = 0, bottom = 0, x, y, r, line
@@ -126,7 +129,6 @@ function atlas(options) {
 			}
 			if (bottom) break
 		}
-		console.timeEnd(1)
 
 		return top - .5 * (top + (h - bottom))
 	}

@@ -28,7 +28,7 @@ the following options:
   * an array specifying the `[start, end]` character codes to use. By default,
     this is `[32, 126]`.
 * `radius`: affects the "slope" of distance-transform, defaults to _size × 1.5_.
-* `align`: aligns symbol vertically by rect rather than by baseline. May affect performance for large shapes.
+* `align`: aligns symbol vertically by rect rather than by baseline. Available values: 'optical' for mass center alignment (slower, but better), 'bounds' for bounding box alignment, `false` for font baseline alignment.
 
 <img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
 
