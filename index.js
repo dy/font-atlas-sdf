@@ -1,3 +1,7 @@
+/**
+ * @module  font-atlas-sdf
+ */
+
 'use strict'
 
 var SDF = require('tiny-sdf')
@@ -67,7 +71,11 @@ function atlas(options) {
 		var data = sdf.draw(chars[i])
 
 		var offY = 0
-		if (vAlign) offY = getAlignOffset(data)
+		if (vAlign) {
+			// offY = getAlignOffset(data)
+			var center = getOpticalCenter(data)
+			offY = -data.height/2 + center[1]
+		}
 
 		ctx.putImageData(data, x, y - offY)
 
@@ -86,6 +94,7 @@ function atlas(options) {
 
 
 	function getAlignOffset (data) {
+		console.time(1)
 		var buf = data.data, w = data.width, h = data.height
 
 		var top = 0, bottom = 0, x, y, r, line
@@ -117,8 +126,41 @@ function atlas(options) {
 			}
 			if (bottom) break
 		}
+		console.timeEnd(1)
 
 		return top - .5 * (top + (h - bottom))
+	}
+
+	//walks over imagedata, returns {average: [x, y], variance: [x, y]}
+	function getOpticalCenter (data) {
+		var buf = data.data, w = data.width, h = data.height
+
+		var x, y, r, i, j, sum, sum2, xSum, ySum, avg = Array(h), avgX = Array(h), cx, cy;
+
+		for (y = 0; y < h; y++) {
+			sum = 0, sum2 = 0, xSum = 0, j = y*4*w
+			for (x = 0; x < w; x++) {
+				i = x*4
+				r = buf[j + i]
+				sum += r
+				xSum += x*r
+				sum2 += r*r
+			}
+			avg[y] = sum === 0 ? 0 : sum/w
+			avgX[y] = sum === 0 ? 0 : xSum/sum
+		}
+
+		sum = 0, ySum = 0, xSum = 0
+		for (y = 0; y < h; y++) {
+			ySum += avg[y]*y
+			sum += avg[y]
+			xSum += avgX[y]*avg[y]
+		}
+
+		cy = ySum/sum
+		cx = xSum/sum
+
+		return [cx, cy]
 	}
 }
 

@@ -10,13 +10,13 @@ let opts = {
 	family: 'sans-serif',
 	size: 64,
 	// chars: [100, 120]
-	chars: ['●','#','✝','+', 'xyz']
+	chars: ['●','#','✝','+', 'xyz', '▲', '▼', '_']
 }
 function update (o) {
 	console.time('sdf')
 	assign(opts, o)
 
-	let w = [Math.min(512, opts.size*16)]
+	let w = Math.min(512, opts.size*16)
 	let size = opts.size
 	let step = size*2.2
 
