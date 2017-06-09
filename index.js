@@ -76,7 +76,17 @@ function atlas(options) {
 
 		//hack tinysdf char-draw method
 		if (fit) {
-			scale = h*(fit) / (props.radius*h*2)
+			var fitRatio = fit
+			if (Array.isArray(fit)) {
+				fitRatio = fit[i]
+			}
+			var vert = (props.bounds[3]-props.bounds[1])*.5
+			var horiz = (props.bounds[2]-props.bounds[0])*.5
+			var maxSide = Math.max( vert , horiz )
+			var diag = Math.sqrt(vert*vert + horiz*horiz)
+			var maxDist = props.radius*.333 + maxSide*.333 + diag*.333
+
+			scale = h*fitRatio / (maxDist*h*2)
 			sdf.ctx.font = size*scale + 'px ' + family;
 		}
 		else {
