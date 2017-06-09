@@ -29,7 +29,7 @@ the following options:
     this is `[32, 126]`.
 * `radius`: affects the "slope" of distance-transform, defaults to _size × 1.5_.
 * `align`: align symbol vertically by bounding box rather than font baseline. Available values: `'optical'` for center of mass alignment (see [optical-properties](https://github.com/dfcreative/optical-properties)) or `'bounds'` for bounding box alignment.
-* `fit`: rescale glyph so to fit into `size` area.
+* `fit`: normalize glyph sizes to cover same part of `size`. Can be a number or bool, eg. `0.5` covers half of `size`, `1` fits to the full size and `false` disables fit. Defaults to `0.5`.
 
 <img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
 

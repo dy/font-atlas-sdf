@@ -23,7 +23,7 @@ function atlas(options) {
 	var radius = options.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
 	var vAlign = options.align == null ? 'optical' : options.align
-	var fit = options.fit == null ? .5 : options.fit
+	var fit = options.fit == null || options.fit == true ? .5 : options.fit
 	var i, j
 
 	if (!Array.isArray(chars)) {
@@ -76,7 +76,7 @@ function atlas(options) {
 
 		//hack tinysdf char-draw method
 		if (fit) {
-			scale = h*(ratio) / (props.radius*h*2)
+			scale = h*(fit) / (props.radius*h*2)
 			sdf.ctx.font = size*scale + 'px ' + family;
 		}
 		else {
