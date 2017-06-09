@@ -1,4 +1,4 @@
-# font-atlas-sdf [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
+# font-atlas-sdf [![unstable](https://img.shields.io/badge/stability-unstable-green.svg)](http://github.com/badges/stability-badges)
 
 Populate a `<canvas>` element with a font texture atlas – can be used to quickly
 generate SDF (Signed Distance Field) fonts. SDF is the most efficient way to draw text in WebGL, see [article](https://www.mapbox.com/blog/text-signed-distance-fields/). For bitmap fonts see [font-atlas](https://github.com/hughsk/font-atlas).
@@ -28,12 +28,13 @@ the following options:
   * an array specifying the `[start, end]` character codes to use. By default,
     this is `[32, 126]`.
 * `radius`: affects the "slope" of distance-transform, defaults to _size × 1.5_.
-* `align`: aligns symbol vertically by rect rather than by baseline. Available values: 'optical' for mass center alignment (slower, but better), 'bounds' for bounding box alignment, `false` for font baseline alignment.
+* `align`: align symbol vertically by bounding box rather than font baseline. Available values: `'optical'` for center of mass alignment (see [optical-properties](https://github.com/dfcreative/optical-properties)) or `'bounds'` for bounding box alignment.
+* `fit`: rescale symbol to the defined area. Can be a number, defining total area proportion. By default `.5`.
 
 <img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
 
 ## Related
 
-* [font-atlas](https://github.com/hughsk/font-atlas) — bitmap font atlas.
-* [tiny-sdf](https://github.com/mapbox/tiny-sdf) — fast glyph signed distance field generation.
-
+* [font-atlas](https://github.com/hughsk/font-atlas) − bitmap font atlas.
+* [tiny-sdf](https://github.com/mapbox/tiny-sdf) − fast glyph signed distance field generation.
+* [optical-properties](https://github.com/dfcreative/optical-properties) − glyph optical center and bounding box calculation

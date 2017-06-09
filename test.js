@@ -26,7 +26,9 @@ function update (o) {
 	  , size: opts.size
 	  , shape: [w,w]
 	  , step: [step, step],
-	  chars: opts.chars
+	  chars: opts.chars,
+	  align: true,
+	  fit: true
 	})
 	console.timeEnd('sdf')
 
@@ -69,9 +71,10 @@ createPanel([
 {id: 'family', type: 'text', value: opts.family, change: v => {
 	update({family: v})
 }},
-// {id: 'chars', type: 'text', value: opts.chars, change: v => {
-// 	update({chars: v})
-// }}
+{id: 'chars', type: 'text', value: opts.chars, change: v => {
+	v = v.split(',')
+	update({chars: v})
+}}
 // {id: 'step', type: 'range', min: 1, max: 128, value: 21, step: 1, change: v => {
 // 	update({size: v})
 // }}

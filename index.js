@@ -5,27 +5,26 @@
 'use strict'
 
 var SDF = require('tiny-sdf')
+var optical = require('optical-properties')
 
 module.exports = atlas
+
 
 function atlas(options) {
 	options = options || {}
 
 	var canvas = options.canvas || document.createElement('canvas')
-	var family = options.family || 'monospace'
+	var family = options.family || 'sans-serif'
 	var shape = options.shape || [512, 512]
 	var step = options.step || [32, 32]
-	var size = options.size || 16
+	var size = parseFloat(options.size) || 16
 	var chars = options.chars || [32, 126]
 	var bufferSize = Math.floor((step[0] - size)/2)
 	var radius = options.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
-	var vAlign = options.align || 'optical'
+	var vAlign = options.align == null ? 'optical' : options.align
+	var fit = options.fit == null ? .5 : options.fit
 	var i, j
-
-	if (typeof size === 'number') {
-		size = size + 'px'
-	}
 
 	if (!Array.isArray(chars)) {
 		chars = String(chars).split('')
@@ -52,36 +51,59 @@ function atlas(options) {
 
 	ctx.fillStyle = '#000'
 	ctx.fillRect(0, 0, canvas.width, canvas.height)
-	ctx.font = size + ' ' + family
 	ctx.textBaseline = 'middle'
 
+	var w = step[0], h = step[1]
 	var x = 0
 	var y = 0
-	var len = Math.min(chars.length, Math.floor(shape[0]/step[0]) * Math.ceil(shape[1]/step[1]))
+	var ratio = size/h
+	var len = Math.min(chars.length, Math.floor(shape[0]/w) * Math.ceil(shape[1]/h))
 
 	// hack tiny-sdf to render centered
 	//FIXME: get rif of it by [possibly] PR to tiny-sdf
 	var align = sdf.ctx.textAlign
 	var buffer = sdf.buffer
+	var middle = sdf.middle
 
 	sdf.ctx.textAlign = 'center'
 	sdf.buffer = sdf.size/2
 
 	for (i = 0; i < len; i++) {
-		var data = sdf.draw(chars[i])
+		if (!chars[i]) continue;
 
-		var offY = 0
-		if (vAlign) {
-			if (vAlign === 'optical') {
-				var center = getOpticalCenter(data)
-				offY = -data.height/2 + center[1]
-			}
-			else {
-				offY = getAlignOffset(data)
-			}
+		var props = getProps(chars[i], family, ratio)
+		var scale = 1, diff = [0, 0]
+
+		//hack tinysdf char-draw method
+		if (fit) {
+			scale = h*(ratio) / (props.radius*h*2)
+			sdf.ctx.font = size*scale + 'px ' + family;
+		}
+		else {
+			sdf.ctx.font = size + 'px ' + family;
 		}
 
-		ctx.putImageData(data, x, y - offY, 0, offY, data.width, data.height - offY)
+		if (vAlign) {
+			if (vAlign === 'optical' || vAlign === true) {
+				diff = [
+					w*.5 - w*props.center[0],
+					h*.5 - h*props.center[1]
+				]
+			}
+			else {
+				diff = [
+					w*.5 - w*(props.bounds[2] + props.bounds[0])*.5,
+					h*.5 - h*(props.bounds[3] + props.bounds[1])*.5
+				]
+			}
+			sdf.middle = middle + diff[1]*scale
+		}
+
+		//calc sdf
+		var data = sdf.draw(chars[i])
+
+		// ctx.putImageData(data, x + diff[0]*scale, y + diff[1]*scale, 0, -diff[1]*scale, data.width, data.height)
+		ctx.putImageData(data, x, y)
 
 		x += step[0]
 		if (x > shape[0] - step[0]) {
@@ -93,76 +115,33 @@ function atlas(options) {
 	// unhack tiny-sdf
 	sdf.ctx.textAlign = align
 	sdf.buffer = buffer
+	sdf.middle = middle
 
 	return canvas
-
-
-	function getAlignOffset (data) {
-		var buf = data.data, w = data.width, h = data.height
-
-		var top = 0, bottom = 0, x, y, r, line
-
-		//find top boundary
-		for (y = 0; y < h; y++) {
-			line = y * w * 4
-			for (x = 0; x < w; x++) {
-				r = buf[line + x * 4]
-
-				if (r > 0) {
-					top = y
-					break
-				}
-			}
-			if (top) break
-		}
-
-		//find bottom boundary
-		for (y = h; y--;) {
-			line = y * w * 4
-			for (x = 0; x < w; x++) {
-				r = buf[line + x * 4]
-
-				if (r > 0) {
-					bottom = y
-					break
-				}
-			}
-			if (bottom) break
-		}
-
-		return top - .5 * (top + (h - bottom))
-	}
-
-	//walks over imagedata, returns {average: [x, y], variance: [x, y]}
-	function getOpticalCenter (data) {
-		var buf = data.data, w = data.width, h = data.height
-
-		var x, y, r, i, j, sum, sum2, xSum, ySum, avg = Array(h), avgX = Array(h), cx, cy;
-
-		for (y = 0; y < h; y++) {
-			sum = 0, sum2 = 0, xSum = 0, j = y*4*w
-			for (x = 0; x < w; x++) {
-				i = x*4
-				r = buf[j + i]
-				sum += r
-				xSum += x*r
-				sum2 += r*r
-			}
-			avg[y] = sum === 0 ? 0 : sum/w
-			avgX[y] = sum === 0 ? 0 : xSum/sum
-		}
-
-		sum = 0, ySum = 0, xSum = 0
-		for (y = 0; y < h; y++) {
-			ySum += avg[y]*y
-			sum += avg[y]
-			xSum += avgX[y]*avg[y]
-		}
-
-		cy = ySum/sum
-		cx = xSum/sum
-
-		return [cx, cy]
-	}
 }
 
+var cache = {}
+function getProps(char, family, ratio) {
+	if (cache[family] && cache[family][char]) return cache[family][char]
+
+	var propsSize = 200
+	var propsFs = propsSize * ratio
+	var props = optical(char, {size: propsSize, fontSize: propsFs, fontFamily: family})
+
+	if (!cache[family]) cache[family] = {}
+
+	var relProps = {
+		center: [
+			props.center[0]/propsSize,
+			props.center[1]/propsSize
+		],
+		bounds: props.bounds.map(function (v) {
+			return v/propsSize
+		}),
+		radius: props.radius/propsSize
+	}
+
+	cache[family][char] = relProps
+
+	return relProps
+}
