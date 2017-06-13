@@ -10,7 +10,7 @@ let opts = {
 	family: 'sans-serif',
 	size: 64,
 	// chars: [100, 120]
-	chars: ['●','#','✝','+', 'xyz', '▲', '▼', '_']
+	chars: '◣●#◢✝+xyz▲▼_'.split('')
 }
 function update (o) {
 	console.time('sdf')

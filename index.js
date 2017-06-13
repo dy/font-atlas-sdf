@@ -113,7 +113,7 @@ function atlas(options) {
 		var data = sdf.draw(chars[i])
 
 		// ctx.putImageData(data, x + diff[0]*scale, y + diff[1]*scale, 0, -diff[1]*scale, data.width, data.height)
-		ctx.putImageData(data, x, y)
+		ctx.putImageData(data, x + diff[0]*scale, y)
 
 		x += step[0]
 		if (x > shape[0] - step[0]) {
