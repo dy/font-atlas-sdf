@@ -14,22 +14,17 @@ generate SDF (Signed Distance Field) fonts. SDF is the most efficient way to dra
 Populates and returns a `<canvas>` element with a font texture atlas. Takes
 the following options:
 
-* `canvas`: use an existing `<canvas>` element. By default, a new one will
-  be created for you.
-* `family`: the font family to use when drawing the text. Default: `monospace`.
-* `shape`: an array containing the `[width, height]` for the canvas in pixels.
-  Default: `[512, 512]`.
-* `step`: an array containing the `[width, height]` for each cell in pixels.
-  Default: `[32, 32]`.
-* `size`: the font size to use when drawing the text. Default: `16px`
-* `chars`: may be one of either:
-  * a string containing all of the characters to use.
-  * an array of all the characters to use.
-  * an array specifying the `[start, end]` character codes to use. By default,
-    this is `[32, 126]`.
-* `radius`: affects the "slope" of distance-transform, defaults to _size × 1.5_.
-* `align`: align symbol vertically by bounding box rather than font baseline. Available values: `'optical'` for center of mass alignment (see [optical-properties](https://github.com/dfcreative/optical-properties)) or `'bounds'` for bounding box alignment.
-* `fit`: normalize glyph sizes to cover same part of `size`. Can be a number or bool, eg. `0.5` covers half of `size`, `1` fits to the full size and `false` disables fit. Defaults to `0.5`.
+Property | Default | Meaning 
+---|---|---
+`canvas` | New canvas | use an existing `<canvas>` element.
+`family` | `monospace` | the font family to use when drawing the text. 
+`shape` | `[512, 512]` | an array containing the `[width, height]` for the canvas in pixels.
+`step` | `[32, 32]` | an array containing the `[width, height]` for each cell in pixels.
+`size` | `16px` | the font size to use when drawing the text.
+`chars` | `[32, 126]` | may be one of either: a string containing all of the characters to use; an array of all the characters to use; an array specifying the `[start, end]` character codes to use.
+`radius` | _size × 1.5_ | affects the "slope" of distance-transform.
+`align` | `'optical'` | align symbol vertically by bounding box rather than font baseline. Available values: `'optical'` for center of mass alignment (see [optical-properties](https://github.com/dfcreative/optical-properties)), `'bounds'` for bounding box alignment or `false` to use font alignment.
+`fit` | `0.5` | normalize glyph sizes to cover same part of `size`. Can be a number or bool, eg. `0.5` covers half of `size`, `1` fits to the full size and `false` disables fit.
 
 <img src="https://raw.githubusercontent.com/dfcreative/font-atlas-sdf/master/atlas.png" alt="Font atlas texture"/>
 
