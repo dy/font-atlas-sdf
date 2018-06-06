@@ -1,6 +1,6 @@
 {
   "name": "font-atlas-sdf",
-  "version": "1.3.3",
+  "version": "2.0.0",
   "description": "Populate a <canvas> with SDF font texture atlas",
   "main": "index.js",
   "scripts": {
