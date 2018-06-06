@@ -6,24 +6,25 @@
 
 var SDF = require('tiny-sdf')
 var optical = require('optical-properties')
+var Font = require('css-font')
 
 module.exports = atlas
 
+function atlas(o) {
+	o = o || {}
 
-function atlas(options) {
-	options = options || {}
-
-	var canvas = options.canvas || document.createElement('canvas')
-	var family = options.family || 'sans-serif'
-	var shape = options.shape || [512, 512]
-	var step = options.step || [32, 32]
-	var size = parseFloat(options.size) || 16
-	var chars = options.chars || [32, 126]
+	var canvas = o.canvas || document.createElement('canvas')
+	var shape = o.shape || [512, 512]
+	var step = o.step || [32, 32]
+	var font = !o.font ? {} : typeof o.font === 'string' ? Font.parse(o.font) : o.font
+	var size = parseFloat(font.size) || 16
+	var family = font.family || 'sans-serif'
+	var chars = o.chars || [32, 126]
 	var bufferSize = Math.floor((step[0] - size)/2)
-	var radius = options.radius || bufferSize*1.5
+	var radius = o.radius || bufferSize*1.5
 	var sdf = new SDF(size, bufferSize, radius, 0, family)
-	var vAlign = options.align == null ? 'optical' : options.align
-	var fit = options.fit == null || options.fit == true ? .5 : options.fit
+	var vAlign = o.align == null ? 'optical' : o.align
+	var fit = o.fit == null || o.fit == true ? .5 : o.fit
 	var i, j
 
 	if (!Array.isArray(chars)) {

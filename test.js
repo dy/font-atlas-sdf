@@ -1,5 +1,5 @@
 const atlasSDF = require('./')
-const atlas = require('font-atlas')
+const atlas = require('../font-atlas')
 const createPanel = require('settings-panel')
 const assign = require('object-assign')
 
@@ -22,13 +22,12 @@ function update (o) {
 
 	atlasSDF({
 		canvas: c1,
-	  family: opts.family
-	  , size: opts.size
-	  , shape: [w,w]
-	  , step: [step, step],
-	  chars: opts.chars,
-	  align: true,
-	  fit: true
+		font: opts.size + 'px ' + opts.family,
+		shape: [w,w],
+		step: [step, step],
+		chars: opts.chars,
+		align: true,
+		fit: true
 	})
 	console.timeEnd('sdf')
 
@@ -36,11 +35,10 @@ function update (o) {
 	console.time('bm')
 	atlas({
 		canvas: c2,
-	  family: opts.family
-	  , size: opts.size
-	  , shape: [w,w]
-	  , step: [step, step],
-	  chars: opts.chars
+		font: opts.size + 'px ' + opts.family,
+		shape: [w,w],
+		step: [step, step],
+		chars: opts.chars
 	})
 	console.timeEnd('bm')
 
